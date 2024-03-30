@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "amaia-ia": {
+      "hosting": {
+        "amaia": [
+          "amaia-ia"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "amaia-ia"
+  }
+}
