@@ -1,13 +1,22 @@
 <nb-layout center>
-
-    <nb-layout-column class="colored-column-basic">
+    <nb-layout-column class="colored-column-basic" style="justify-content: center;">
     <img id="logo" src="/assets/imgs/logo.png" alt="LOGO">
+    CLOSED ALPHA
     <form>
-      <input class="login-component" type="text" nbInput shape="round" placeholder="E-mail"><br>
-      <input class="login-component" type="password" nbInput shape="round" placeholder="Password"><br>
-      <input class="login-component" nbButton shape="semi-round" status="primary" type="button" value="Login"><br>
+    <nb-form-field>
+      <nb-icon nbPrefix icon="at-outline" pack="eva"></nb-icon>
+      <input class="login-component" type="text" nbInput shape="round" placeholder="E-mail" required><br>
+    </nb-form-field>
+    <nb-form-field>
+      <nb-icon nbPrefix icon="lock-outline" pack="eva"></nb-icon>
+      <input class="login-component" type="password" nbInput shape="round" placeholder="Password" required><br>
+    </nb-form-field>
+    <input class="login-component" nbButton shape="semi-round" status="primary" type="button" value="Login"><br>
+   </form>
       <p class="login-link"><a style="text-decoration: none;" href="/register">Not registered yet?</a></p>
       <p class="login-link"><a style="text-decoration: none;">Lost password</a></p>
-    </form>
+    
     </nb-layout-column>
-</nb-layout>
+
+    <nb-layout-footer>Gabriele Petroni - 2024</nb-layout-footer>
+</nb-layout> 

@@ -1,4 +1,14 @@
 import {
+  FirebaseApp,
+  FirebaseApps,
+  VERSION,
+  ɵAngularFireSchedulers,
+  ɵAppCheckInstances,
+  ɵgetAllInstancesOf,
+  ɵgetDefaultInstanceOf,
+  ɵzoneWrap
+} from "./chunk-7ZFRJVJN.js";
+import {
   applyActionCode,
   beforeAuthStateChanged,
   checkActionCode,
@@ -53,20 +63,10 @@ import {
   validatePassword,
   verifyBeforeUpdateEmail,
   verifyPasswordResetCode
-} from "./chunk-NX2JAY5D.js";
-import {
-  FirebaseApp,
-  FirebaseApps,
-  VERSION,
-  ɵAngularFireSchedulers,
-  ɵAppCheckInstances,
-  ɵgetAllInstancesOf,
-  ɵgetDefaultInstanceOf,
-  ɵzoneWrap
-} from "./chunk-BCBFSJMR.js";
+} from "./chunk-FHBMY3WD.js";
 import {
   registerVersion
-} from "./chunk-T35SN4FM.js";
+} from "./chunk-62MBBRYD.js";
 import {
   InjectionToken,
   Injector,
@@ -76,7 +76,7 @@ import {
   setClassMetadata,
   ɵɵdefineInjector,
   ɵɵdefineNgModule
-} from "./chunk-RRIGUE7E.js";
+} from "./chunk-JLGCRQB7.js";
 import {
   Observable,
   concatMap,
@@ -85,7 +85,7 @@ import {
   of,
   switchMap,
   timer
-} from "./chunk-KR2YZ3EK.js";
+} from "./chunk-QC2G5H4A.js";
 
 // node_modules/rxfire/auth/index.esm.js
 function authState(auth) {
@@ -314,4 +314,4 @@ rxfire/auth/index.esm.js:
    * limitations under the License.
    *)
 */
-//# sourceMappingURL=chunk-74NMIAPD.js.map
+//# sourceMappingURL=chunk-SXHK4CDR.js.map

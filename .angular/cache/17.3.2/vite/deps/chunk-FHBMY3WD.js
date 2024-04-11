@@ -6,6 +6,7 @@ import {
   Logger,
   SDK_VERSION,
   _getProvider,
+  _isFirebaseServerApp,
   _registerComponent,
   base64Decode,
   createSubscribe,
@@ -24,14 +25,14 @@ import {
   querystring,
   querystringDecode,
   registerVersion
-} from "./chunk-T35SN4FM.js";
+} from "./chunk-62MBBRYD.js";
 import {
   __async,
   __rest,
   __superGet
-} from "./chunk-OEXE5OTR.js";
+} from "./chunk-4YP4IGJS.js";
 
-// node_modules/@firebase/auth/dist/esm2017/index-77658911.js
+// node_modules/@firebase/auth/dist/esm2017/index-219c3cac.js
 var FactorId = {
   /** Phone as second factor */
   PHONE: "phone",
@@ -661,6 +662,9 @@ function _errorWithCustomMessage(auth, code, message) {
   return factory.create(code, {
     appName: auth.name
   });
+}
+function _serverAppCurrentUserOperationNotSupportedError(auth) {
+  return _errorWithCustomMessage(auth, "operation-not-supported-in-this-environment", "Operations that alter the current user are not supported in conjunction with FirebaseServerApp");
 }
 function _assertInstanceOf(auth, object, instance) {
   const constructorInstance = instance;
@@ -1558,17 +1562,26 @@ var StsTokenManager = class _StsTokenManager {
     const expiresIn = "expiresIn" in response && typeof response.expiresIn !== "undefined" ? Number(response.expiresIn) : _tokenExpiresIn(response.idToken);
     this.updateTokensAndExpiration(response.idToken, response.refreshToken, expiresIn);
   }
+  updateFromIdToken(idToken) {
+    _assert(
+      idToken.length !== 0,
+      "internal-error"
+      /* AuthErrorCode.INTERNAL_ERROR */
+    );
+    const expiresIn = _tokenExpiresIn(idToken);
+    this.updateTokensAndExpiration(idToken, null, expiresIn);
+  }
   getToken(auth, forceRefresh = false) {
     return __async(this, null, function* () {
+      if (!forceRefresh && this.accessToken && !this.isExpired) {
+        return this.accessToken;
+      }
       _assert(
-        !this.accessToken || this.refreshToken,
+        this.refreshToken,
         auth,
         "user-token-expired"
         /* AuthErrorCode.TOKEN_EXPIRED */
       );
-      if (!forceRefresh && this.accessToken && !this.isExpired) {
-        return this.accessToken;
-      }
       if (this.refreshToken) {
         yield this.refresh(auth, this.refreshToken);
         return this.accessToken;
@@ -1749,6 +1762,9 @@ var UserImpl = class _UserImpl {
   }
   delete() {
     return __async(this, null, function* () {
+      if (_isFirebaseServerApp(this.auth.app)) {
+        return Promise.reject(_serverAppCurrentUserOperationNotSupportedError(this.auth));
+      }
       const idToken = yield this.getIdToken();
       yield _logoutIfInvalidated(this, deleteAccount(this.auth, { idToken }));
       this.stsTokenManager.clearRefreshToken();
@@ -1861,6 +1877,45 @@ var UserImpl = class _UserImpl {
         isAnonymous
       });
       yield _reloadWithoutSaving(user);
+      return user;
+    });
+  }
+  /**
+   * Initialize a User from an idToken server response
+   * @param auth
+   * @param idTokenResponse
+   */
+  static _fromGetAccountInfoResponse(auth, response, idToken) {
+    return __async(this, null, function* () {
+      const coreAccount = response.users[0];
+      _assert(
+        coreAccount.localId !== void 0,
+        "internal-error"
+        /* AuthErrorCode.INTERNAL_ERROR */
+      );
+      const providerData = coreAccount.providerUserInfo !== void 0 ? extractProviderData(coreAccount.providerUserInfo) : [];
+      const isAnonymous = !(coreAccount.email && coreAccount.passwordHash) && !(providerData === null || providerData === void 0 ? void 0 : providerData.length);
+      const stsTokenManager = new StsTokenManager();
+      stsTokenManager.updateFromIdToken(idToken);
+      const user = new _UserImpl({
+        uid: coreAccount.localId,
+        auth,
+        stsTokenManager,
+        isAnonymous
+      });
+      const updates = {
+        uid: coreAccount.localId,
+        displayName: coreAccount.displayName || null,
+        photoURL: coreAccount.photoUrl || null,
+        email: coreAccount.email || null,
+        emailVerified: coreAccount.emailVerified || false,
+        phoneNumber: coreAccount.phoneNumber || null,
+        tenantId: coreAccount.tenantId || null,
+        providerData,
+        metadata: new UserMetadata(coreAccount.createdAt, coreAccount.lastLoginAt),
+        isAnonymous: !(coreAccount.email && coreAccount.passwordHash) && !(providerData === null || providerData === void 0 ? void 0 : providerData.length)
+      };
+      Object.assign(user, updates);
       return user;
     });
   }
@@ -2356,9 +2411,31 @@ var AuthImpl = class {
       );
     });
   }
+  initializeCurrentUserFromIdToken(idToken) {
+    return __async(this, null, function* () {
+      try {
+        const response = yield getAccountInfo(this, { idToken });
+        const user = yield UserImpl._fromGetAccountInfoResponse(this, response, idToken);
+        yield this.directlySetCurrentUser(user);
+      } catch (err) {
+        console.warn("FirebaseServerApp could not login user with provided authIdToken: ", err);
+        yield this.directlySetCurrentUser(null);
+      }
+    });
+  }
   initializeCurrentUser(popupRedirectResolver) {
     return __async(this, null, function* () {
       var _a;
+      if (_isFirebaseServerApp(this.app)) {
+        const idToken = this.app.settings.authIdToken;
+        if (idToken) {
+          return new Promise((resolve) => {
+            setTimeout(() => this.initializeCurrentUserFromIdToken(idToken).then(resolve, resolve));
+          });
+        } else {
+          return this.directlySetCurrentUser(null);
+        }
+      }
       const previouslyStoredUser = yield this.assertedPersistence.getCurrentUser();
       let futureCurrentUser = previouslyStoredUser;
       let needsTocheckMiddleware = false;
@@ -2436,6 +2513,9 @@ var AuthImpl = class {
   }
   updateCurrentUser(userExtern) {
     return __async(this, null, function* () {
+      if (_isFirebaseServerApp(this.app)) {
+        return Promise.reject(_serverAppCurrentUserOperationNotSupportedError(this));
+      }
       const user = userExtern ? getModularInstance(userExtern) : null;
       if (user) {
         _assert(
@@ -2472,6 +2552,9 @@ var AuthImpl = class {
   }
   signOut() {
     return __async(this, null, function* () {
+      if (_isFirebaseServerApp(this.app)) {
+        return Promise.reject(_serverAppCurrentUserOperationNotSupportedError(this));
+      }
       yield this.beforeStateQueue.runMiddleware(null);
       if (this.redirectPersistenceManager || this._popupRedirectResolver) {
         yield this._setRedirectUser(null);
@@ -2484,6 +2567,9 @@ var AuthImpl = class {
     });
   }
   setPersistence(persistence) {
+    if (_isFirebaseServerApp(this.app)) {
+      return Promise.reject(_serverAppCurrentUserOperationNotSupportedError(this));
+    }
     return this.queue(() => __async(this, null, function* () {
       yield this.assertedPersistence.setPersistence(_getInstance(persistence));
     }));
@@ -4270,6 +4356,9 @@ function providerIdForResponse(response) {
 function signInAnonymously(auth) {
   return __async(this, null, function* () {
     var _a;
+    if (_isFirebaseServerApp(auth.app)) {
+      return Promise.reject(_serverAppCurrentUserOperationNotSupportedError(auth));
+    }
     const authInternal = _castAuth(auth);
     yield authInternal._initializationPromise;
     if ((_a = authInternal.currentUser) === null || _a === void 0 ? void 0 : _a.isAnonymous) {
@@ -4355,6 +4444,9 @@ function _assertLinkedStatus(expected, user, provider) {
 function _reauthenticate(user, credential, bypassAuthState = false) {
   return __async(this, null, function* () {
     const { auth } = user;
+    if (_isFirebaseServerApp(auth.app)) {
+      return Promise.reject(_serverAppCurrentUserOperationNotSupportedError(auth));
+    }
     const operationType = "reauthenticate";
     try {
       const response = yield _logoutIfInvalidated(user, _processCredentialSavingMfaContextIfNecessary(auth, operationType, credential, user), bypassAuthState);
@@ -4393,6 +4485,9 @@ function _reauthenticate(user, credential, bypassAuthState = false) {
 }
 function _signInWithCredential(auth, credential, bypassAuthState = false) {
   return __async(this, null, function* () {
+    if (_isFirebaseServerApp(auth.app)) {
+      return Promise.reject(_serverAppCurrentUserOperationNotSupportedError(auth));
+    }
     const operationType = "signIn";
     const response = yield _processCredentialSavingMfaContextIfNecessary(auth, operationType, credential);
     const userCredential = yield UserCredentialImpl._fromIdTokenResponse(auth, operationType, response);
@@ -4426,6 +4521,9 @@ function signInWithCustomToken$1(auth, request) {
 }
 function signInWithCustomToken(auth, customToken) {
   return __async(this, null, function* () {
+    if (_isFirebaseServerApp(auth.app)) {
+      return Promise.reject(_serverAppCurrentUserOperationNotSupportedError(auth));
+    }
     const authInternal = _castAuth(auth);
     const response = yield signInWithCustomToken$1(authInternal, {
       token: customToken,
@@ -4611,6 +4709,9 @@ function verifyPasswordResetCode(auth, code) {
 }
 function createUserWithEmailAndPassword(auth, email, password) {
   return __async(this, null, function* () {
+    if (_isFirebaseServerApp(auth.app)) {
+      return Promise.reject(_serverAppCurrentUserOperationNotSupportedError(auth));
+    }
     const authInternal = _castAuth(auth);
     const request = {
       returnSecureToken: true,
@@ -4632,6 +4733,9 @@ function createUserWithEmailAndPassword(auth, email, password) {
   });
 }
 function signInWithEmailAndPassword(auth, email, password) {
+  if (_isFirebaseServerApp(auth.app)) {
+    return Promise.reject(_serverAppCurrentUserOperationNotSupportedError(auth));
+  }
   return signInWithCredential(getModularInstance(auth), EmailAuthProvider.credential(email, password)).catch((error) => __async(this, null, function* () {
     if (error.code === `auth/${"password-does-not-meet-requirements"}`) {
       void recachePasswordPolicy(auth);
@@ -4669,6 +4773,9 @@ function isSignInWithEmailLink(auth, emailLink) {
 }
 function signInWithEmailLink(auth, email, emailLink) {
   return __async(this, null, function* () {
+    if (_isFirebaseServerApp(auth.app)) {
+      return Promise.reject(_serverAppCurrentUserOperationNotSupportedError(auth));
+    }
     const authModular = getModularInstance(auth);
     const credential = EmailAuthProvider.credentialWithLink(email, emailLink || _getCurrentUrl());
     _assert(
@@ -4764,7 +4871,11 @@ function updateProfile(_0, _1) {
   });
 }
 function updateEmail(user, newEmail) {
-  return updateEmailOrPassword(getModularInstance(user), newEmail, null);
+  const userInternal = getModularInstance(user);
+  if (_isFirebaseServerApp(userInternal.auth.app)) {
+    return Promise.reject(_serverAppCurrentUserOperationNotSupportedError(userInternal.auth));
+  }
+  return updateEmailOrPassword(userInternal, newEmail, null);
 }
 function updatePassword(user, newPassword) {
   return updateEmailOrPassword(getModularInstance(user), null, newPassword);
@@ -6302,6 +6413,9 @@ var ConfirmationResultImpl = class {
 };
 function signInWithPhoneNumber(auth, phoneNumber, appVerifier) {
   return __async(this, null, function* () {
+    if (_isFirebaseServerApp(auth.app)) {
+      return Promise.reject(_serverAppCurrentUserOperationNotSupportedError(auth));
+    }
     const authInternal = _castAuth(auth);
     const verificationId = yield _verifyPhoneNumber(authInternal, phoneNumber, getModularInstance(appVerifier));
     return new ConfirmationResultImpl(verificationId, (cred) => signInWithCredential(authInternal, cred));
@@ -6323,6 +6437,9 @@ function linkWithPhoneNumber(user, phoneNumber, appVerifier) {
 function reauthenticateWithPhoneNumber(user, phoneNumber, appVerifier) {
   return __async(this, null, function* () {
     const userInternal = getModularInstance(user);
+    if (_isFirebaseServerApp(userInternal.auth.app)) {
+      return Promise.reject(_serverAppCurrentUserOperationNotSupportedError(userInternal.auth));
+    }
     const verificationId = yield _verifyPhoneNumber(userInternal.auth, phoneNumber, getModularInstance(appVerifier));
     return new ConfirmationResultImpl(verificationId, (cred) => reauthenticateWithCredential(userInternal, cred));
   });
@@ -6406,7 +6523,11 @@ function _verifyPhoneNumber(auth, options, verifier) {
 }
 function updatePhoneNumber(user, credential) {
   return __async(this, null, function* () {
-    yield _link$1(getModularInstance(user), credential);
+    const userInternal = getModularInstance(user);
+    if (_isFirebaseServerApp(userInternal.auth.app)) {
+      return Promise.reject(_serverAppCurrentUserOperationNotSupportedError(userInternal.auth));
+    }
+    yield _link$1(userInternal, credential);
   });
 }
 var PhoneAuthProvider = class _PhoneAuthProvider {
@@ -6697,6 +6818,13 @@ var AbstractPopupRedirectOperation = class {
 var _POLL_WINDOW_CLOSE_TIMEOUT = new Delay(2e3, 1e4);
 function signInWithPopup(auth, provider, resolver) {
   return __async(this, null, function* () {
+    if (_isFirebaseServerApp(auth.app)) {
+      return Promise.reject(_createError(
+        auth,
+        "operation-not-supported-in-this-environment"
+        /* AuthErrorCode.OPERATION_NOT_SUPPORTED */
+      ));
+    }
     const authInternal = _castAuth(auth);
     _assertInstanceOf(auth, provider, FederatedAuthProvider);
     const resolverInternal = _withDefaultResolver(authInternal, resolver);
@@ -6707,6 +6835,13 @@ function signInWithPopup(auth, provider, resolver) {
 function reauthenticateWithPopup(user, provider, resolver) {
   return __async(this, null, function* () {
     const userInternal = getModularInstance(user);
+    if (_isFirebaseServerApp(userInternal.auth.app)) {
+      return Promise.reject(_createError(
+        userInternal.auth,
+        "operation-not-supported-in-this-environment"
+        /* AuthErrorCode.OPERATION_NOT_SUPPORTED */
+      ));
+    }
     _assertInstanceOf(userInternal.auth, provider, FederatedAuthProvider);
     const resolverInternal = _withDefaultResolver(userInternal.auth, resolver);
     const action = new PopupOperation(userInternal.auth, "reauthViaPopup", provider, resolverInternal, userInternal);
@@ -6911,6 +7046,9 @@ function signInWithRedirect(auth, provider, resolver) {
 }
 function _signInWithRedirect(auth, provider, resolver) {
   return __async(this, null, function* () {
+    if (_isFirebaseServerApp(auth.app)) {
+      return Promise.reject(_serverAppCurrentUserOperationNotSupportedError(auth));
+    }
     const authInternal = _castAuth(auth);
     _assertInstanceOf(auth, provider, FederatedAuthProvider);
     yield authInternal._initializationPromise;
@@ -6931,6 +7069,9 @@ function _reauthenticateWithRedirect(user, provider, resolver) {
   return __async(this, null, function* () {
     const userInternal = getModularInstance(user);
     _assertInstanceOf(userInternal.auth, provider, FederatedAuthProvider);
+    if (_isFirebaseServerApp(userInternal.auth.app)) {
+      return Promise.reject(_serverAppCurrentUserOperationNotSupportedError(userInternal.auth));
+    }
     yield userInternal.auth._initializationPromise;
     const resolverInternal = _withDefaultResolver(userInternal.auth, resolver);
     yield _setPendingRedirectStatus(resolverInternal, userInternal.auth);
@@ -6961,6 +7102,9 @@ function getRedirectResult(auth, resolver) {
 }
 function _getRedirectResult(auth, resolverExtern, bypassAuthState = false) {
   return __async(this, null, function* () {
+    if (_isFirebaseServerApp(auth.app)) {
+      return Promise.reject(_serverAppCurrentUserOperationNotSupportedError(auth));
+    }
     const authInternal = _castAuth(auth);
     const resolver = _withDefaultResolver(authInternal, resolverExtern);
     const action = new RedirectAction(authInternal, resolver, bypassAuthState);
@@ -7703,7 +7847,7 @@ function _isEmptyString(input) {
   return typeof input === "undefined" || (input === null || input === void 0 ? void 0 : input.length) === 0;
 }
 var name = "@firebase/auth";
-var version = "1.6.1";
+var version = "1.7.1";
 var AuthInterop = class {
   constructor(auth) {
     this.auth = auth;
@@ -7863,11 +8007,14 @@ function getAuth(app = getApp()) {
       browserSessionPersistence
     ]
   });
-  const authTokenSyncUrl = getExperimentalSetting("authTokenSyncURL");
-  if (authTokenSyncUrl) {
-    const mintCookie = mintCookieFactory(authTokenSyncUrl);
-    beforeAuthStateChanged(auth, mintCookie, () => mintCookie(auth.currentUser));
-    onIdTokenChanged(auth, (user) => mintCookie(user));
+  const authTokenSyncPath = getExperimentalSetting("authTokenSyncURL");
+  if (authTokenSyncPath && typeof isSecureContext === "boolean" && isSecureContext) {
+    const authTokenSyncUrl = new URL(authTokenSyncPath, location.origin);
+    if (location.origin === authTokenSyncUrl.origin) {
+      const mintCookie = mintCookieFactory(authTokenSyncUrl.toString());
+      beforeAuthStateChanged(auth, mintCookie, () => mintCookie(auth.currentUser));
+      onIdTokenChanged(auth, (user) => mintCookie(user));
+    }
   }
   const authEmulatorHost = getDefaultEmulatorHost("auth");
   if (authEmulatorHost) {
@@ -7995,7 +8142,7 @@ export {
 };
 /*! Bundled license information:
 
-@firebase/auth/dist/esm2017/index-77658911.js:
+@firebase/auth/dist/esm2017/index-219c3cac.js:
   (**
    * @license
    * Copyright 2021 Google LLC
@@ -8045,7 +8192,7 @@ export {
    * limitations under the License.
    *)
 
-@firebase/auth/dist/esm2017/index-77658911.js:
+@firebase/auth/dist/esm2017/index-219c3cac.js:
   (**
    * @license
    * Copyright 2020 Google LLC
@@ -8143,7 +8290,7 @@ export {
    * limitations under the License.
    *)
 
-@firebase/auth/dist/esm2017/index-77658911.js:
+@firebase/auth/dist/esm2017/index-219c3cac.js:
   (**
    * @license
    * Copyright 2020 Google LLC
@@ -8193,4 +8340,4 @@ export {
    * limitations under the License.
    *)
 */
-//# sourceMappingURL=chunk-NX2JAY5D.js.map
+//# sourceMappingURL=chunk-FHBMY3WD.js.map

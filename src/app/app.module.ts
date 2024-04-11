@@ -4,11 +4,12 @@ import { RouterModule, Routes} from '@angular/router';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NbCardModule, NbThemeModule } from '@nebular/theme';
+import { NbCardModule, NbIconModule, NbThemeModule } from '@nebular/theme';
 
 import { NbSidebarModule, NbLayoutModule, NbButtonModule } from '@nebular/theme';
 import { NbInputModule} from '@nebular/theme';
-import { NbIconModule } from '@nebular/theme';
+import { NbFormFieldModule } from '@nebular/theme';
+import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
@@ -18,13 +19,17 @@ import { HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { LostpasswordComponent } from './lostpassword/lostpassword.component';
+import { InstallAppComponent } from './install-app/install-app.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    LostpasswordComponent,
+    InstallAppComponent
   ],
   imports: [
     BrowserModule,
@@ -33,6 +38,8 @@ import { RegisterComponent } from './register/register.component';
     NbThemeModule.forRoot(),
     NbLayoutModule,
     NbInputModule,
+    NbFormFieldModule,
+    NbEvaIconsModule,
     NbIconModule,
     NbSidebarModule.forRoot(),
     NbButtonModule,

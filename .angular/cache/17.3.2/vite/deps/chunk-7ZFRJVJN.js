@@ -6,7 +6,7 @@ import {
   onLog,
   registerVersion,
   setLogLevel
-} from "./chunk-T35SN4FM.js";
+} from "./chunk-62MBBRYD.js";
 import {
   Inject,
   Injectable,
@@ -23,7 +23,7 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
-} from "./chunk-RRIGUE7E.js";
+} from "./chunk-JLGCRQB7.js";
 import {
   Observable,
   asyncScheduler,
@@ -35,11 +35,11 @@ import {
   subscribeOn,
   tap,
   timer
-} from "./chunk-KR2YZ3EK.js";
+} from "./chunk-QC2G5H4A.js";
 
 // node_modules/firebase/app/dist/esm/index.esm.js
 var name = "firebase";
-var version = "10.8.1";
+var version = "10.11.0";
 registerVersion(name, version, "app");
 
 // node_modules/@angular/fire/fesm2022/angular-fire.mjs
@@ -363,4 +363,4 @@ firebase/app/dist/esm/index.esm.js:
    * limitations under the License.
    *)
 */
-//# sourceMappingURL=chunk-BCBFSJMR.js.map
+//# sourceMappingURL=chunk-7ZFRJVJN.js.map
