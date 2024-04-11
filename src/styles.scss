@@ -11,3 +11,9 @@
   @include nb-theme-global();
   @include nb-auth-global();
 }
+
+body {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+}
