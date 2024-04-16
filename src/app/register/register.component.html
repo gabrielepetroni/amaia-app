@@ -1,13 +1,29 @@
 <nb-layout center>
-
     <nb-layout-column class="colored-column-basic">
-    <form>
-      <input class="login-component" type="text" nbInput shape="round" placeholder="Name"><br>
-      <input class="login-component" type="text" nbInput shape="round" placeholder="Surname"><br>
-      <input class="login-component" type="text" nbInput shape="round" placeholder="E-mail"><br>
-      <input class="login-component" type="password" nbInput shape="round" placeholder="Password"><br>
-      <input class="login-component" type="password" nbInput shape="round" placeholder="Repeat password"><br>
-      <input class="login-component" type="text" nbInput shape="round" placeholder="Activation code"><br>
+    
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <h6>Nice to meet you! 😄</h6>
+      <nb-form-field>
+        <nb-icon nbPrefix icon="person-outline" pack="eva"></nb-icon>
+        <input class="login-component" type="text" nbInput shape="round"  placeholder="Name" formControlName="username" required><br>
+        <label *ngIf="submitted && f.username.errors"></label>
+      </nb-form-field>
+      <nb-form-field>
+        <nb-icon nbPrefix icon="at-outline" pack="eva"></nb-icon>
+        <input class="login-component" type="email" nbInput shape="round" placeholder="E-mail" formControlName="email" required><br>
+      </nb-form-field>
+      <nb-form-field>
+        <nb-icon nbPrefix icon="lock-outline" pack="eva"></nb-icon>
+        <input class="login-component" type="password" nbInput shape="round" placeholder="Password" formControlName="pwd" required><br>
+      </nb-form-field>
+      <nb-form-field>
+        <nb-icon nbPrefix icon="lock-outline" pack="eva"></nb-icon>
+        <input class="login-component" type="password" nbInput shape="round" placeholder="Repeat password" formControlName="pwd2" required><br>
+      </nb-form-field>
+      <nb-form-field>
+        <nb-icon nbPrefix icon="checkmark-outline" pack="eva"></nb-icon>
+        <input class="login-component" type="text" nbInput shape="round" placeholder="Activation code" formControlName="code"><br>
+      </nb-form-field>
       <input class="login-component" nbButton shape="semi-round" status="primary" type="button" value="Register"><br>
       <p class="login-link"><a style="text-decoration: none;" href="/login">Already registered?</a></p>
     </form>

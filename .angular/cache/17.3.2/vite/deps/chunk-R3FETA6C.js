@@ -1,14 +1,4 @@
 import {
-  FirebaseApp,
-  FirebaseApps,
-  VERSION,
-  ɵAngularFireSchedulers,
-  ɵAppCheckInstances,
-  ɵgetAllInstancesOf,
-  ɵgetDefaultInstanceOf,
-  ɵzoneWrap
-} from "./chunk-7ZFRJVJN.js";
-import {
   applyActionCode,
   beforeAuthStateChanged,
   checkActionCode,
@@ -64,6 +54,16 @@ import {
   verifyBeforeUpdateEmail,
   verifyPasswordResetCode
 } from "./chunk-FHBMY3WD.js";
+import {
+  FirebaseApp,
+  FirebaseApps,
+  VERSION,
+  ɵAngularFireSchedulers,
+  ɵAppCheckInstances,
+  ɵgetAllInstancesOf,
+  ɵgetDefaultInstanceOf,
+  ɵzoneWrap
+} from "./chunk-7ZFRJVJN.js";
 import {
   registerVersion
 } from "./chunk-62MBBRYD.js";
@@ -314,4 +314,4 @@ rxfire/auth/index.esm.js:
    * limitations under the License.
    *)
 */
-//# sourceMappingURL=chunk-SXHK4CDR.js.map
+//# sourceMappingURL=chunk-R3FETA6C.js.map

@@ -1,1 +1,11 @@
 node_modules
+tsconfig.json
+firebase.json
+package.json
+.firebaserc
+angular.json
+ngsw-config.json
+package-lock.json
+dist
+.firebase
+.github

@@ -22,6 +22,8 @@ import { RegisterComponent } from './register/register.component';
 import { LostpasswordComponent } from './lostpassword/lostpassword.component';
 import { InstallAppComponent } from './install-app/install-app.component';
 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
@@ -44,6 +46,8 @@ import { InstallAppComponent } from './install-app/install-app.component';
     NbSidebarModule.forRoot(),
     NbButtonModule,
     NbCardModule,
+    FormsModule,
+    ReactiveFormsModule,
     provideFirebaseApp(() => initializeApp({"projectId":"amaia-ia","appId":"1:656231601276:web:3d5bed006a2b3d1140e5f9","storageBucket":"amaia-ia.appspot.com","apiKey":"AIzaSyATgAwX_HoHFMMCkmU6Q4cfPJ1nAvtwh3Q","authDomain":"amaia-ia.firebaseapp.com","messagingSenderId":"656231601276","measurementId":"G-DQYG0G8Q8Q"})),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),

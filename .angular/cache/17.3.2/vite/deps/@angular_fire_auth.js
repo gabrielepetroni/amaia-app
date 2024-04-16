@@ -61,8 +61,7 @@ import {
   validatePassword,
   verifyBeforeUpdateEmail,
   verifyPasswordResetCode
-} from "./chunk-SXHK4CDR.js";
-import "./chunk-7ZFRJVJN.js";
+} from "./chunk-R3FETA6C.js";
 import {
   AUTH_ERROR_CODES_MAP_DO_NOT_USE_INTERNALLY,
   ActionCodeOperation,
@@ -95,6 +94,7 @@ import {
   indexedDBLocalPersistence,
   prodErrorMap
 } from "./chunk-FHBMY3WD.js";
+import "./chunk-7ZFRJVJN.js";
 import "./chunk-62MBBRYD.js";
 import "./chunk-JLGCRQB7.js";
 import "./chunk-QC2G5H4A.js";

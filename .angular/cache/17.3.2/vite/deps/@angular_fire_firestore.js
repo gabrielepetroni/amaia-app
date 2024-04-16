@@ -1,6 +1,7 @@
 import {
   AuthInstances
-} from "./chunk-SXHK4CDR.js";
+} from "./chunk-R3FETA6C.js";
+import "./chunk-FHBMY3WD.js";
 import {
   FirebaseApp,
   FirebaseApps,
@@ -11,7 +12,6 @@ import {
   ɵgetDefaultInstanceOf,
   ɵzoneWrap
 } from "./chunk-7ZFRJVJN.js";
-import "./chunk-FHBMY3WD.js";
 import {
   Component,
   FirebaseError,
