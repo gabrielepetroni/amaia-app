@@ -10,3 +10,5 @@ dist
 .firebase
 .github
 src/constants.ts
+.DS_Store
+.angular/
