@@ -1,0 +1,55 @@
+<nb-layout center>
+    <nb-layout-header subheader>
+        <nb-actions>
+          <nb-action icon="arrow-back-outline" (click)="router.navigateByUrl('/home')"></nb-action> 
+        </nb-actions>
+      </nb-layout-header>
+    <nb-layout-column class="colored-column-basic">
+      <h6>Want to know more?</h6>
+      <nb-accordion style="text-align: left;">
+        <nb-accordion-item>
+          <nb-accordion-item-header>
+            What is Amaia?
+          </nb-accordion-item-header>
+          <nb-accordion-item-body>
+            Amaia is an intelligent service capable of having friendly conversation with a user about almost any topic. 
+            It uses Artificial Intelligence to provide text responses and to build the emotional profile of the user. 
+            Amaia's goal is to help the user whenever it's feeling bad or down, acting and behaving just like a good friend.<br>
+          </nb-accordion-item-body>
+        </nb-accordion-item>
+      
+        <nb-accordion-item>
+          <nb-accordion-item-header>
+            What technology is Amaia using?
+          </nb-accordion-item-header>
+          <nb-accordion-item-body>
+            Amaia consists of a fine tuned OpenAI GPT 3.5 Turbo model for conversations and different categorization models to build the user emotional profile.
+          </nb-accordion-item-body>
+        </nb-accordion-item>
+      
+        <nb-accordion-item>
+          <nb-accordion-item-header>
+            How are my conversations with Amaia treated?
+          </nb-accordion-item-header>
+          <nb-accordion-item-body>
+            Your conversations with Amaia are not saved or stored. The messages persist on your local storage as long as you're logged-in. 
+            Every interaction you have with Amaia is used to finetune your emotional profile. 
+          </nb-accordion-item-body>
+        </nb-accordion-item>
+
+        <nb-accordion-item>
+          <nb-accordion-item-header>
+            Does or can Amaia learn to recognize me?
+          </nb-accordion-item-header>
+          <nb-accordion-item-body>
+            At the moment, Amaia is not capable of recognizing a specific user. However, if you feel your conversation with Amaia has been useful
+            and would like for her to behave the same in the future, you can press the <nb-icon icon="smiling-face-outline"></nb-icon> button on the 
+            chat interface. Your conversation will then be used to train Amaia, after undergoing a revision process that consist of anonymization and removing inappropried data. Only in this case, your conversation will be
+            stored on the online application database. 
+          </nb-accordion-item-body>
+        </nb-accordion-item>
+
+
+      </nb-accordion>
+    </nb-layout-column>
+</nb-layout> 

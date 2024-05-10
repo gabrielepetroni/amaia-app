@@ -1,0 +1,45 @@
+<nb-layout center>
+    <nb-layout-header subheader>
+        <nb-actions>
+          <nb-action icon="arrow-back-outline" (click)="router.navigateByUrl('/home')"></nb-action> 
+        </nb-actions>
+      </nb-layout-header>
+
+    <nb-layout-column class="colored-column-basic" style="justify-content: center;">
+        <nb-card>
+            <nb-card-body>
+                <nb-user size="large" [name]="userName" [title]="userEmail" style="text-align: left;"></nb-user>
+            </nb-card-body>
+        </nb-card>
+        <nb-flip-card>
+            <nb-card-front>
+                <nb-card>
+                    <nb-card-body>
+                        <apx-chart
+                            [series]="chartOptions.series"
+                            [chart]="chartOptions.chart"
+                            [xaxis]="chartOptions.xaxis"
+                            [title]="chartOptions.title">
+                        </apx-chart>
+                    </nb-card-body>
+                    <nb-card-footer>
+                        Let's ask Amaia
+                    </nb-card-footer>
+                </nb-card>
+            </nb-card-front>
+            <nb-card-back>
+                <nb-card>
+                    <nb-card-header>
+                        Let's ask Amaia
+                    </nb-card-header>
+                    <nb-card-body>
+                        <p>AMAIA MESSAGE</p>
+                    </nb-card-body>
+                </nb-card>
+            </nb-card-back>
+        </nb-flip-card>
+     
+        <button nbButton outline shape="round" status="danger" (click)="authService.Logout()">Logout<nb-icon icon="log-out-outline"></nb-icon></button>
+    </nb-layout-column>
+
+</nb-layout> 

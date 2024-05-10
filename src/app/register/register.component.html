@@ -6,33 +6,40 @@
       <nb-form-field>
         <nb-icon nbPrefix icon="person-outline" pack="eva"></nb-icon>
         <input class="login-component" type="text" nbInput shape="round"  placeholder="Name" formControlName="username" required><br>
-        <label *ngIf="submitted && f.username.errors"></label>
       </nb-form-field>
+      <p class="login-error" *ngIf="submitted && f.username.errors">Invalid name!</p>
+      <br>
       <nb-form-field>
         <nb-icon nbPrefix icon="at-outline" pack="eva"></nb-icon>
         <input class="login-component" type="email" nbInput shape="round" placeholder="E-mail" formControlName="email" required><br>
       </nb-form-field>
+      <p class="login-error" *ngIf="submitted && f.email.errors">Invalid e-mail adress!</p>
+      <br>
       <nb-form-field>
         <nb-icon nbPrefix icon="lock-outline" pack="eva"></nb-icon>
         <input class="login-component" type="password" nbInput shape="round" placeholder="Password" formControlName="pwd" required><br>
       </nb-form-field>
+      <p class="login-error" *ngIf="submitted && f.pwd.errors">Password must be at least 10 characters long!</p>
+      <br>
       <nb-form-field>
         <nb-icon nbPrefix icon="lock-outline" pack="eva"></nb-icon>
         <input class="login-component" type="password" nbInput shape="round" placeholder="Repeat password" formControlName="pwd2" required><br>
       </nb-form-field>
+      <p class="login-error" *ngIf="submitted && f.pwd2.errors">Passwords do not match!</p>
+      <br>
       <nb-form-field>
         <nb-icon nbPrefix icon="checkmark-outline" pack="eva"></nb-icon>
         <input class="login-component" type="text" nbInput shape="round" placeholder="Activation code" formControlName="code"><br>
       </nb-form-field>
-      <input class="login-component" nbButton shape="semi-round" status="primary" type="button" value="Register"><br>
-      <p class="login-link"><a style="text-decoration: none;" href="/login">Already registered?</a></p>
-    </form>
+      <p class="login-error" *ngIf="submitted && f.code.errors">No activation code provided!</p>
+      <br><br>
+      <button nbButton status="primary">Register</button>
+     </form>
+     <p><a style="text-decoration: none;" href="/login">I already have an account</a></p>
     </nb-layout-column>
 
     <nb-card>
      
     </nb-card>
-
-    <nb-layout-footer>Gabriele Petroni - 2024</nb-layout-footer>
 
 </nb-layout>

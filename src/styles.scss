@@ -17,3 +17,38 @@ body {
   height: 100%;
   width: 100%;
 }
+
+nb-layout-column {
+	background: linear-gradient(-60deg,  #80d7cc, #9ce2e3,  #7dd8dc, #77dddd,);
+	background-size: 400%;
+    animation: gradient 12s ease infinite;
+    
+    text-align: center;
+    justify-content: center;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+nb-form-field{
+    text-align: center;
+	justify-content: center;
+
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.login-error {
+    color: red;
+    margin-top: 0;
+    margin-bottom: -0.1em;
+}

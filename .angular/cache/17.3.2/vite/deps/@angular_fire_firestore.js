@@ -1,7 +1,7 @@
 import {
   AuthInstances
-} from "./chunk-R3FETA6C.js";
-import "./chunk-FHBMY3WD.js";
+} from "./chunk-2NG6YTOO.js";
+import "./chunk-3DPLGB5L.js";
 import {
   FirebaseApp,
   FirebaseApps,
@@ -11,7 +11,7 @@ import {
   ɵgetAllInstancesOf,
   ɵgetDefaultInstanceOf,
   ɵzoneWrap
-} from "./chunk-7ZFRJVJN.js";
+} from "./chunk-YVRK7DJT.js";
 import {
   Component,
   FirebaseError,
@@ -30,19 +30,14 @@ import {
   isIndexedDBAvailable,
   isSafari,
   registerVersion
-} from "./chunk-62MBBRYD.js";
+} from "./chunk-YGYKBRZA.js";
 import {
   InjectionToken,
   Injector,
   NgModule,
   NgZone,
-  Optional,
-  setClassMetadata,
-  ɵɵdefineInjector,
-  ɵɵdefineNgModule
-} from "./chunk-JLGCRQB7.js";
-import {
   Observable,
+  Optional,
   concatMap,
   distinct,
   distinctUntilChanged,
@@ -52,13 +47,16 @@ import {
   pairwise,
   pipe,
   scan,
+  setClassMetadata,
   startWith,
-  timer
-} from "./chunk-QC2G5H4A.js";
+  timer,
+  ɵɵdefineInjector,
+  ɵɵdefineNgModule
+} from "./chunk-TXNQMPYJ.js";
 import {
   __async,
   __superGet
-} from "./chunk-4YP4IGJS.js";
+} from "./chunk-TOGHQJOS.js";
 
 // node_modules/@firebase/webchannel-wrapper/dist/esm/index.esm2017.js
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};

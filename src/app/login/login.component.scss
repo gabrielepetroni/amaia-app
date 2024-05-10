@@ -1,41 +1,19 @@
 #logo {
     align-content: center;
-    margin: 15vw;
-}
-
-nb-layout-column {
-	background: linear-gradient(-60deg,  #80d7cc, #9ce2e3,  #7dd8dc, #77dddd,);
-	background-size: 400%;
-    animation: gradient 15s ease infinite;
-    
-    text-align: center;
-    justify-content: center;
-}
-
-nb-form-field{
-	margin: 10vw;
-	justify-content: center
+    margin-top: 20%;
 }
 
 .login-link{
 	text-decoration: none;
-	padding: 3vw;
 }
 
 form {
 	margin-top: 30%;
-	margin-bottom: 30%;
+	margin-bottom: 20%;
 }
 
-
-@keyframes gradient {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
+.login-error {
+    color: red;
+    margin-top: 0;
+    margin-bottom: -0.1em;
 }

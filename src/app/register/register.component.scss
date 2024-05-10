@@ -1,18 +1,10 @@
-nb-layout-column {
-	background: linear-gradient(-45deg, #9ce2e3, #77dddd, #7dd8dc, #80d7cc);
-	background-size: 400%;
-    animation: gradient 15s ease infinite;
-    
-    text-align: center;
-    justify-content: center;
-}
-
-nb-form-field{
-	margin: 5vw;
-	justify-content: center
-}
-
 form {
     margin-top: 30%;
     margin-bottom: 30%;
+}
+
+.login-error {
+    color: red;
+    margin-top: 0;
+    margin-bottom: -0.1em;
 }

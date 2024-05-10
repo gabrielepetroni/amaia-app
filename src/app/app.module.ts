@@ -1,10 +1,12 @@
 import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes} from '@angular/router'; 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NbCardModule, NbIconModule, NbThemeModule } from '@nebular/theme';
+import { NbAccordionComponent, NbAccordionModule, NbActionComponent, NbActionsModule, NbCardModule, NbChatModule, NbIconModule, NbThemeModule, NbUserModule } from '@nebular/theme';
+import { NbToastrModule } from '@nebular/theme';
 
 import { NbSidebarModule, NbLayoutModule, NbButtonModule } from '@nebular/theme';
 import { NbInputModule} from '@nebular/theme';
@@ -23,6 +25,15 @@ import { LostpasswordComponent } from './lostpassword/lostpassword.component';
 import { InstallAppComponent } from './install-app/install-app.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HomeComponent } from './home/home.component';
+import { AuthService } from './services/auth.service';
+import { DataService } from './services/data.service';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { UserComponent } from './user/user.component';
+
+import { NgApexchartsModule } from "ng-apexcharts";
+import { InfoComponent } from './info/info.component';
+import { FB_API_KEY, FB_APP_ID, FB_MEASUREMENTE_ID, FB_MESSAGE_ID } from '../constants';
 
 
 @NgModule({
@@ -31,11 +42,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     LoginComponent,
     RegisterComponent,
     LostpasswordComponent,
-    InstallAppComponent
+    InstallAppComponent,
+    HomeComponent,
+    UserComponent,
+    InfoComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
     RouterModule,
     NbThemeModule.forRoot(),
     NbLayoutModule,
@@ -43,12 +58,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     NbFormFieldModule,
     NbEvaIconsModule,
     NbIconModule,
+    NbChatModule,
+    NbAccordionModule,
+    NbActionsModule,
+    NgApexchartsModule,
+    NbUserModule,
     NbSidebarModule.forRoot(),
+    NbToastrModule.forRoot(),
     NbButtonModule,
     NbCardModule,
     FormsModule,
     ReactiveFormsModule,
-    provideFirebaseApp(() => initializeApp({"projectId":"amaia-ia","appId":"1:656231601276:web:3d5bed006a2b3d1140e5f9","storageBucket":"amaia-ia.appspot.com","apiKey":"AIzaSyATgAwX_HoHFMMCkmU6Q4cfPJ1nAvtwh3Q","authDomain":"amaia-ia.firebaseapp.com","messagingSenderId":"656231601276","measurementId":"G-DQYG0G8Q8Q"})),
+    provideFirebaseApp(() => initializeApp({"projectId":"amaia-ia","appId":FB_APP_ID,"storageBucket":"amaia-ia.appspot.com","apiKey":FB_API_KEY,"authDomain":"amaia-ia.firebaseapp.com","messagingSenderId":FB_MESSAGE_ID,"measurementId":FB_MEASUREMENTE_ID})),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     HttpClientModule,
@@ -59,7 +80,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
       registrationStrategy: 'registerWhenStable:30000'
     }),
   ],
-  providers: [NbLayoutModule],
+  providers: [NbLayoutModule, AuthService, DataService, provideCharts(withDefaultRegisterables())],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

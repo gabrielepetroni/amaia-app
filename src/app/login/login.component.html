@@ -1,22 +1,26 @@
 <nb-layout center>
     <nb-layout-column class="colored-column-basic" style="justify-content: center;">
     <img id="logo" src="/assets/imgs/logo.png" alt="LOGO">
-    CLOSED ALPHA
-    <form>
-    <nb-form-field>
-      <nb-icon nbPrefix icon="at-outline" pack="eva"></nb-icon>
-      <input class="login-component" type="text" nbInput shape="round" placeholder="E-mail" required><br>
-    </nb-form-field>
-    <nb-form-field>
-      <nb-icon nbPrefix icon="lock-outline" pack="eva"></nb-icon>
-      <input class="login-component" type="password" nbInput shape="round" placeholder="Password" required><br>
-    </nb-form-field>
-    <input class="login-component" nbButton shape="semi-round" status="primary" type="button" value="Login"><br>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <h6>CLOSED ALPHA</h6> 
+      <nb-form-field>
+        <nb-icon nbPrefix icon="at-outline" pack="eva"></nb-icon>
+        <input class="login-component" type="text" nbInput shape="round" placeholder="E-mail" formControlName="email" required><br>
+      </nb-form-field>
+      <p class="login-error" *ngIf="submitted && f.email.errors">Invalid e-mail adress!</p>
+      <br>
+      <nb-form-field>
+        <nb-icon nbPrefix icon="lock-outline" pack="eva"></nb-icon>
+        <input class="login-component" type="password" nbInput shape="round" placeholder="Password" formControlName="pwd" required><br>
+      </nb-form-field>
+      <p class="login-error" *ngIf="submitted && f.pwd.errors">Password must be at least 10 characters long!</p>
+      <br>
+      <button nbButton status="primary" (click)="onSubmit()">Login</button>
    </form>
-      <p class="login-link"><a style="text-decoration: none;" href="/register">Not registered yet?</a></p>
-      <p class="login-link"><a style="text-decoration: none;">Lost password</a></p>
-    
+      <a style="text-decoration: none;" href="/register">Not registered yet?</a>
+      <br><br>
+      <a style="text-decoration: none;" href="/lostpassword">Lost password</a>
     </nb-layout-column>
 
-    <nb-layout-footer>Gabriele Petroni - 2024</nb-layout-footer>
+    <nb-layout-footer fixed>Gabriele Petroni - 2024</nb-layout-footer>
 </nb-layout> 
