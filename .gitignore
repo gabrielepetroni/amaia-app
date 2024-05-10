@@ -6,7 +6,7 @@ package.json
 angular.json
 ngsw-config.json
 package-lock.json
-dist
-.firebase
-.github
+dist/
+.firebase/
+.github/
 src/constants.ts
